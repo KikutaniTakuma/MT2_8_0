@@ -26,10 +26,15 @@ public:
 	static const int kStageNumberHeight;
 	static const int kMapWidth;
 	static const int kMapHeight;
-
 	static std::vector<int> data;
 
+private:
+	static const class Camera* camera;
+
+public:
 	static void Initilize();
+
+	static void SetCamera(class Camera* cameraPointa);
 
 	static void Finalize();
 

@@ -1,8 +1,10 @@
 #pragma once
+#include "Game/Object/Object.h"
+
 class Vector2D;
 class Matrix3x3;
 
-class Player {
+class Player : public Object {
 public:
 	struct State {
 		float hp;
@@ -16,12 +18,11 @@ public:
 	};
 
 public:
-	Player();
+	Player() = delete;
+	Player(Camera* camera);
 	~Player();
 
 private:
-	
-
 	Vector2D* tentativPos;
 	Vector2D* size;
 	Vector2D* moveVec;
@@ -46,11 +47,11 @@ private:
 	bool flgZeroGravity;
 
 public:
-	void Update();
+	void Update() override;
 
-	void Draw(class Texture& tex);
+	void Draw(class Texture& tex) override;
 
-	void Reset();
+	void Reset() override;
 
 private:
 	void Move();

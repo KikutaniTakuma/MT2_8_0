@@ -1,21 +1,24 @@
 #pragma once
 
-class Vector2D;
-class Matrix3x3;
+#include "Game/Vector2D/Vector2D.h"
+#include "Game/Matrix3x3/Matrix3x3.h"
 
 class Camera {
-private:
-	inline Camera(){}
-	inline ~Camera(){}
+public:
+	Camera();
+	~Camera();
 
 public:
-	static void Initalize(const Vector2D& initPos);
+	/// <summary>
+	/// カメラの更新処理
+	/// </summary>
+	/// <param name="worldPos">カメラのワールド座標</param>
+	/// <param name="cameraPos">カメラのスクリーン座標</param>
+	/// <param name="scale">表示する大きさ</param>
+	/// <param name="shake">シェイクするかどうか</param>
+	void Update(const Vector2D& worldPos, const Vector2D& cameraPos, const float& scale = 1.0f, const bool& shake = false);
 
-	static void Initalize();
-
-	static void Finalize();
-
-	static void Update(const Vector2D& worldPos, const float& scale = 1.0f, const bool& shake = false);
+	void Update(const Vector2D& worldPos, const Vector2D& cameraPos, const Vector2D& drawLeftTop, const Vector2D& drawRightBottom, const bool& shake = false);
 
 	/// <summary>
 	/// DrawQuad
@@ -25,7 +28,7 @@ public:
 	/// <param name="animationSpd">数字を大きくするほど遅くなる</param>
 	/// <param name="animationStop">trueならアニメーションさせない</param>
 	/// <param name="color">特に指定しない場合WHITEになる</param>
-	static void DrawQuad(class Quad quad, class Texture& texture, const int& animationSpd, const bool& animationStop, const unsigned int& color = 0xffffffff);
+	void DrawQuad(class Quad quad, class Texture& texture, const int& animationSpd, const bool& animationStop, const unsigned int& color = 0xffffffff) const;
 
 	/// <summary>
 	/// DrawQuad
@@ -36,8 +39,8 @@ public:
 	/// <param name="animationSpd">数字を大きくするほど遅くなる</param>
 	/// <param name="animationStop">trueならアニメーションさせない</param>
 	/// <param name="color">特に指定しない場合WHITEになる</param>
-	static void DrawQuad(class Quad quad, class Texture& texture, float deg, const int& animationSpd, const bool& animationStop, const unsigned int& color = 0xffffffff);
-	
+	void DrawQuad(class Quad quad, class Texture& texture, float deg, const int& animationSpd, const bool& animationStop, const unsigned int& color = 0xffffffff) const;
+
 	/// <summary>
 	/// DrawUI
 	/// <para>カメラがどこにいようが表示する</para>
@@ -46,36 +49,56 @@ public:
 	/// <param name="texture"></param>
 	/// <param name="animationSpd">数字を大きくするほど遅くなる</param>
 	/// <param name="animationStop">trueならアニメーションさせない</param>
-	static void DrawUI(class Quad quad, class Texture texture, const int& animationSpd, const bool& animationStop);
+	void DrawUI(class Quad quad, class Texture& texture, const int& animationSpd, const bool& animationStop) const;
 
-	// カメラ内に映ってるかどうか
-	// 戻り値：
-	// ture:映ってる
-	// false:映ってない
-	static bool isDraw(Vector2D pos);
+	/// <summary>
+	/// カメラ内に映ってるかどうか
+	/// </summary>
+	/// <param name="pos">ポジション</param>
+	/// <param name="drawLength">描画距離(デフォルトで0.0f)</param>
+	/// <returns>
+	/// <para>ture:映ってる</para>
+	/// <para>false:映ってない</para>
+	/// </returns>
+	bool isDraw(Vector2D pos, const float& drawLength = 0.0f) const;
+
+	Vector2D getPos() const;
 
 private:
-	static void Shake();
+	void Shake();
 
 private:
 	// カメラ座標(真ん中)
-	static Vector2D* centerPos;
+	Vector2D worldPos;
+
+	Vector2D screenPos;
+
+	Vector2D drawLeftTop;
+
+	Vector2D drawRightBottom;
 
 	// どのくらいの大きさで表示するか(デフォルトは1.0f)
-	static float scale;
+	float scale;
+
+	// カメラの映るサイズ
+	Vector2D size;
 
 	// シェイクの大きさ
-	static Vector2D* shakeScale;
+	Vector2D shakeScale;
 
-	static Matrix3x3* viewMatrix;
+	// ビュー行列
+	Matrix3x3 viewMatrix;
 
-	static Matrix3x3* NorDevMatrix;
+	// 正射影行列
+	Matrix3x3 NorDevMatrix;
 
-	static Matrix3x3* viewPortMatrix;
+	// ビューポート行列
+	Matrix3x3 viewPortMatrix;
 
-	static Matrix3x3* vpvpMatrix;
+	// レンダリング行列
+	Matrix3x3 vpvpMatrix;
 
 public:
 	// フレーム
-	static class Frame* frame;
+	class Frame* frame;
 };

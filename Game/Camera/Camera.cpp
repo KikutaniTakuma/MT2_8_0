@@ -13,105 +13,87 @@
 #include <stdlib.h>
 #include <limits.h>
 
-// 静的メンバ変数の初期化
-float Camera:: scale = 1.0f;
-Vector2D* Camera::centerPos = nullptr;
-Frame* Camera::frame = nullptr;
-Vector2D* Camera::shakeScale = nullptr;
-Matrix3x3* Camera::viewMatrix = nullptr;
-Matrix3x3* Camera::NorDevMatrix = nullptr;
-Matrix3x3* Camera::viewPortMatrix = nullptr;
-Matrix3x3* Camera::vpvpMatrix = nullptr;
+Camera::Camera() {
+	worldPos = { static_cast<float>(MapChip::kWindowWidth) / 2.0f, static_cast<float>(MapChip::kWindowHeight) / 2.0f };
+	screenPos = { 0.0f,0.0f };
 
-void Camera::Initalize(const Vector2D& initPos) {
-	centerPos = new Vector2D(initPos);
+	drawLeftTop = { static_cast<float>(MapChip::kWindowWidth) / -2.0f, static_cast<float>(MapChip::kWindowHeight) / 2.0f };
+	drawRightBottom = { static_cast<float>(MapChip::kWindowWidth) / 2.0f, static_cast<float>(MapChip::kWindowHeight) / -2.0f };
+
+	size = { static_cast<float>(MapChip::kWindowWidth), static_cast<float>(MapChip::kWindowHeight) };
+	viewMatrix.MakeTranslate(worldPos);
+	viewMatrix.Inverse();
+
+	NorDevMatrix.Orthographic(drawLeftTop, drawRightBottom);
+
+	viewPortMatrix.Viewport({ 0.0f,0.0f }, size);
+
 	frame = new Frame;
-	shakeScale = new Vector2D;
-
-	viewMatrix = new Matrix3x3;
-
-	viewMatrix->MakeTranslate(initPos);
-	viewMatrix->Inverse();
-
-	NorDevMatrix = new Matrix3x3;
-
-	NorDevMatrix->Orthographic({1280.0f, 720.0f});
-
-	viewPortMatrix = new Matrix3x3;
-
-	viewPortMatrix->Viewport({0.0f,0.0f},{1280.0f,720.0f});
-
-	vpvpMatrix = new Matrix3x3;
-
 	frame->Restart();
 
-	*shakeScale = { 10.0f, 10.0f };
+	shakeScale = { 10.0f, 10.0f };
 }
 
-void Camera::Initalize() {
-	centerPos = new Vector2D;
-	frame = new Frame;
-	shakeScale = new Vector2D;
-
-	viewMatrix = new Matrix3x3;
-	viewMatrix->MakeTranslate(*centerPos);
-	viewMatrix->Inverse();
-
-	NorDevMatrix = new Matrix3x3;
-
-	NorDevMatrix->Orthographic({ 1280.0f, 702.0f });
-
-	viewPortMatrix = new Matrix3x3;
-
-	viewPortMatrix->Viewport({ 0.0f,0.0f }, { 1280.0f, 702.0f });
-
-	vpvpMatrix = new Matrix3x3;
-
-	frame->Restart();
-	*centerPos = { static_cast<float>(MapChip::kWindowWidth / 2), static_cast<float>(MapChip::kWindowHeight / 2) };
-
-	*shakeScale = { 10.0f, 10.0f };
-}
-
-void Camera::Finalize() {
-	delete centerPos;
+Camera::~Camera(){
 	delete frame;
-	delete shakeScale;
-	delete viewMatrix;
-	delete NorDevMatrix;
-	delete viewPortMatrix;
-	delete vpvpMatrix;
 }
 
-void Camera::Update(const Vector2D& worldPos, const float& scale, const bool& shake) {
+void Camera::Update(const Vector2D& worldPos, const Vector2D& cameraPos, const float& scale, const bool& shake) {
 	frame->Start();
 	if (frame->frame > ULLONG_MAX) {
 		frame->Stop();
 		frame->Restart();
 	}
 
-	Camera::scale = scale;
+	this->scale = scale;
 
-	*centerPos = worldPos;
+	this->worldPos = worldPos;
 
 	// もしシェイクフラグがオンなら
 	if (shake) {
 		Shake();
 	}
 
-	viewMatrix->MakeTranslate(*centerPos);
-	viewMatrix->Inverse();
+	viewMatrix.MakeTranslate(this->worldPos);
+	viewMatrix.Inverse();
+	NorDevMatrix.Orthographic(size / this->scale);
+	viewPortMatrix.Viewport(cameraPos, size);
 
-	*vpvpMatrix = (*viewMatrix) * (*NorDevMatrix) * (*viewPortMatrix);
+	vpvpMatrix = viewMatrix * NorDevMatrix * viewPortMatrix;
 }
+
+void Camera::Update(const Vector2D& worldPos, const Vector2D& cameraPos, const Vector2D& drawLeftTop, const Vector2D& drawRightBottom, const bool& shake) {
+	frame->Start();
+	if (frame->frame > ULLONG_MAX) {
+		frame->Stop();
+		frame->Restart();
+	}
+
+	this->worldPos = worldPos;
+
+	// もしシェイクフラグがオンなら
+	if (shake) {
+		Shake();
+	}
+	this->drawLeftTop = drawLeftTop;
+	this->drawRightBottom = drawRightBottom;
+
+	viewMatrix.MakeTranslate(this->worldPos);
+	viewMatrix.Inverse();
+	NorDevMatrix.Orthographic(this->drawLeftTop, this->drawRightBottom);
+	viewPortMatrix.Viewport(cameraPos, size);
+
+	vpvpMatrix = viewMatrix * NorDevMatrix * viewPortMatrix;
+}
+
 
 void Camera::Shake() {
-	centerPos->x += static_cast<float>((rand() % static_cast<int>(shakeScale->x))) - shakeScale->x / 2.0f;
-	centerPos->y += static_cast<float>((rand() % static_cast<int>(shakeScale->y))) - shakeScale->y / 2.0f;
+	worldPos.x += static_cast<float>((rand() % static_cast<int>(shakeScale.x))) - shakeScale.x / 2.0f;
+	worldPos.y += static_cast<float>((rand() % static_cast<int>(shakeScale.y))) - shakeScale.y / 2.0f;
 }
 
-void Camera::DrawQuad(Quad quad, Texture& texture, const int& animationSpd, const bool& animationStop, const unsigned int& color) {
-	quad.worldMatrix *= (*vpvpMatrix);
+void Camera::DrawQuad(Quad quad, Texture& texture, const int& animationSpd, const bool& animationStop, const unsigned int& color) const {
+	quad.worldMatrix *= vpvpMatrix;
 
 	if (!animationStop && animationSpd != 0) {
 		if (frame->frame % animationSpd == 0) {
@@ -131,8 +113,8 @@ void Camera::DrawQuad(Quad quad, Texture& texture, const int& animationSpd, cons
 	);
 }
 
-void Camera::DrawQuad(class Quad quad, class Texture& texture, float deg, const int& animationSpd, const bool& animationStop, const unsigned int& color) {
-	quad.worldMatrix *= (*vpvpMatrix);
+void Camera::DrawQuad(class Quad quad, Texture& texture, float deg, const int& animationSpd, const bool& animationStop, const unsigned int& color) const {
+	quad.worldMatrix *= vpvpMatrix;
 
 	if (!animationStop && animationSpd != 0) {
 		if (frame->frame % animationSpd == 0) {
@@ -153,8 +135,10 @@ void Camera::DrawQuad(class Quad quad, class Texture& texture, float deg, const 
 }
 
 
-void Camera::DrawUI(Quad quad, Texture texture, const int& animationSpd, const bool& animationStop) {
-	MyMath::CoordinateChange(quad.worldPos);
+void Camera::DrawUI(Quad quad, Texture& texture, const int& animationSpd, const bool& animationStop) const {
+	Matrix3x3 mat;
+	mat.MakeTranslate(worldPos);
+	quad.worldMatrix *= mat * vpvpMatrix;
 
 	if (!animationStop && animationSpd != 0) {
 		if (frame->frame % animationSpd == 0) {
@@ -175,13 +159,17 @@ void Camera::DrawUI(Quad quad, Texture texture, const int& animationSpd, const b
 }
 
 
-bool Camera::isDraw(Vector2D pos) {
-	const float& length = MyMath::PythagoreanTheorem(pos.x - Camera::centerPos->x, pos.y - Camera::centerPos->y);
-	const float& cameraLength = MyMath::PythagoreanTheorem(static_cast<float>(MapChip::kWindowWidth / 2), static_cast<float>(MapChip::kWindowHeight / 2));
-	if (length < cameraLength / scale + 100.0f) {
-		return true;
-	}
-	else {
+bool Camera::isDraw(Vector2D pos, const float& drawLength) const {
+	pos -= worldPos;
+	if (pos.x < drawLeftTop.x - drawLength || pos.x > drawRightBottom.x + drawLength ||
+		pos.y > drawLeftTop.y + drawLength || pos.y < drawRightBottom.y - drawLength) {
 		return false;
 	}
+	else {
+		return true;
+	}
+}
+
+Vector2D Camera::getPos() const {
+	return worldPos;
 }

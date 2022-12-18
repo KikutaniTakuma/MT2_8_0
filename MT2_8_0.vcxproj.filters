@@ -65,11 +65,14 @@
     <Filter Include="Game\Vector2D">
       <UniqueIdentifier>{d2c8edc2-65bc-4b24-98e8-28d06f0c39c7}</UniqueIdentifier>
     </Filter>
-     <Filter Include="Resources">
+    <Filter Include="Resources">
       <UniqueIdentifier>{8f3e9f71-89a1-44a9-8e2b-3f024bd169e8}</UniqueIdentifier>
     </Filter>
     <Filter Include="Data">
       <UniqueIdentifier>{fd792175-76cd-4743-b278-e9718c0c7a15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Object">
+      <UniqueIdentifier>{acd0457e-c740-4980-a715-16ebaa1fc1a9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -136,6 +139,9 @@
     </ClCompile>
     <ClCompile Include="Game\Player\Player.cpp">
       <Filter>Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Object\Object.cpp">
+      <Filter>Game\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -265,17 +271,20 @@
     <ClInclude Include="Game\Player\Player.h">
       <Filter>Player</Filter>
     </ClInclude>
+    <ClInclude Include="Game\Object\Object.h">
+      <Filter>Game\Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-  <ClInclude Include="Resources\debugfont.png">
+    <ClInclude Include="Resources\debugfont.png">
       <Filter>Resources</Filter>
     </ClInclude>
     <ClInclude Include="Resources\white1x1.png">
       <Filter>Resources</Filter>
     </ClInclude>
   </ItemGroup>
-   <ItemGroup>
-  <ClInclude Include="Data\MapChipData.csv">
+  <ItemGroup>
+    <ClInclude Include="Data\MapChipData.csv">
       <Filter>Data</Filter>
     </ClInclude>
     <ClInclude Include="Data\playerData.csv">

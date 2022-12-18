@@ -17,7 +17,8 @@
 #include <math.h>
 
 // 規定コンストラクタ
-Player::Player()
+Player::Player(Camera* camera):
+	Object(camera)
 {
 	pos = new Quad;
 	size = new Vector2D;
@@ -118,7 +119,7 @@ void Player::Update() {
 // 描画処理関数
 
 void Player::Draw(Texture& tex) {
-	Camera::DrawQuad(*pos, tex, 6, false, BLUE);
+	camera->DrawQuad(*pos, tex, 6, false, BLUE);
 }
 
 // 移動関数

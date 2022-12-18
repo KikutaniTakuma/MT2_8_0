@@ -11,17 +11,20 @@
 std::vector<int> MapChip::data;
 const int MapChip::kMapSize = 32;
 const int MapChip::kWindowWidth = 1280;
-const int MapChip::kWindowHeight = 704;
+const int MapChip::kWindowHeight = 720;
 const int MapChip::kStageNumberWidth = 1;
 const int MapChip::kStageNumberHeight = 1;
 const int MapChip::kMapWidth = (kWindowWidth / kMapSize) * kStageNumberWidth;
 const int MapChip::kMapHeight = (kWindowHeight / kMapSize) * kStageNumberHeight;
-
+const Camera* MapChip::camera = nullptr;
 
 void MapChip::Initilize() {
 	MapChip::data.resize(MapChip::kMapHeight * MapChip::kMapWidth);
 
 	IOcsv::Input("./Data/MapChipData.csv", MapChip::data);
+}
+void MapChip::SetCamera(Camera* cameraPointa) {
+	camera = cameraPointa;
 }
 
 void MapChip::Finalize() {
@@ -45,12 +48,12 @@ bool  MapChip::Collision(const Vector2D& pos) {
 }
 
 int  MapChip::GetType(Vector2D worldPos) {
-	MyMath::CoordinateChange(worldPos, MapChip::kWindowHeight * MapChip::kStageNumberHeight);
+	MyMath::CoordinateChange(worldPos);
 
 	int y = (int)worldPos.y / MapChip::kMapSize;
 	int x = (int)worldPos.x / MapChip::kMapSize;
 
-	MyMath::CoordinateChange(worldPos, MapChip::kWindowHeight * MapChip::kStageNumberHeight);
+	MyMath::CoordinateChange(worldPos);
 
 	if (x >= MapChip::kMapWidth || y >= MapChip::kMapHeight || x < 0 || y < 0) {
 		return (int)MapChip::Type::NONE;
@@ -73,29 +76,39 @@ void MapChip::Draw(Texture& texture) {
 	int y = 0;
 	Quad quad( {0.0f,0.0f}, { kMapSize, kMapSize } );
 
+	int CameraX = static_cast<int>(camera->getPos().x) / kMapSize;
+	int CameraY = static_cast<int>(camera->getPos().y) / kMapSize;
+
+	int lengthX = (kWindowWidth / kMapSize) / 2;
+	int lengthY = (kWindowHeight / kMapSize) / 2;
+
 	for (y = MapChip::kMapHeight - 1; y >= 0; y--) {
+		/*if (CameraY + lengthY < y || (CameraY - lengthY) > y) {
+			continue;
+		}*/
+
 		for (x = 0; x < MapChip::kMapWidth; x++) {
 			quad.worldPos = { static_cast<float>((x * kMapSize) + kMapSize / 2), static_cast<float>((y * kMapSize) + kMapSize / 2) };
 			MyMath::CoordinateChange(quad.worldPos);
 			quad.worldMatrix.MakeTranslate(quad.worldPos);
 
-			if (!Camera::isDraw(quad.worldPos))
+			if (!camera->isDraw(quad.worldPos))
 			{
 				continue;
 			}
 
 			switch (data[y * MapChip::kMapWidth + x]) {
 			case (int)MapChip::Type::NONE:
-				Camera::DrawQuad(quad, texture, 0, false, BLACK);
+				camera->DrawQuad(quad, texture, 0, false, BLACK);
 
 				break;
 			case (int)MapChip::Type::BLOCK:
-				Camera::DrawQuad(quad, texture, 0, false, WHITE);
+				camera->DrawQuad(quad, texture, 0, false, WHITE);
 
 				break;
 
 			default:
-				Camera::DrawQuad(quad, texture, 0, false, BLACK);
+				camera->DrawQuad(quad, texture, 0, false, BLACK);
 
 				break;
 			}

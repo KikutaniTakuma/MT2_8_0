@@ -5,7 +5,7 @@
 #include "Game/Vector2D/Vector2D.h"
 #include "Game/MapChip/MapChip.h"
 
-const int MyMath::kCoodinateChangeConstant = MapChip::kWindowHeight;
+const int MyMath::kCoodinateChangeConstant = (MapChip::kMapHeight * MapChip::kMapSize);
 
 void MyMath::CoordinateChange(const Vector2D& worldPos, Vector2D& screenPos) {
 	screenPos.x = worldPos.x;
