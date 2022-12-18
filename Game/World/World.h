@@ -21,16 +21,6 @@ public:
 	void MainLoop();
 
 private:
-	Vector2D cameraWorldPos;
-
-	Vector2D cameraScreenPos;
-
-	Vector2D drawLeftTop;
-
-	Vector2D drawRightBottm;
-
-	float scale;
-
 	Camera* camera;
 
 	class Player* player;

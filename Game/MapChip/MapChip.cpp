@@ -76,26 +76,33 @@ void MapChip::Draw(Texture& texture) {
 	int y = 0;
 	Quad quad( {0.0f,0.0f}, { kMapSize, kMapSize } );
 
-	int CameraX = static_cast<int>(camera->getPos().x) / kMapSize;
-	int CameraY = static_cast<int>(camera->getPos().y) / kMapSize;
+	// カメラの映る範囲のマップチップの番号を取得
+	int firstY = (static_cast<int>(camera->getPos().y) / kMapSize) + (static_cast<int>(camera->getDrawSize().y / 2.0f) / kMapSize) + 1;
+	int lastY = (static_cast<int>(camera->getDrawSize().y / 2.0f) / kMapSize) - (static_cast<int>(camera->getPos().y) / kMapSize) - 1;
+	firstY += lastY;
 
-	int lengthX = (kWindowWidth / kMapSize) / 2;
-	int lengthY = (kWindowHeight / kMapSize) / 2;
+	if (firstY > kMapHeight - 1) {
+		firstY = kMapHeight - 1;
+	}
+	if (lastY < 0) {
+		lastY = 0;
+	}
 
-	for (y = MapChip::kMapHeight - 1; y >= 0; y--) {
-		/*if (CameraY + lengthY < y || (CameraY - lengthY) > y) {
-			continue;
-		}*/
+	int firstX = (static_cast<int>(camera->getPos().x) / kMapSize) - (static_cast<int>(camera->getDrawSize().x / 2.0f) / kMapSize) - 1;
+	int lastX = (static_cast<int>(camera->getPos().x) / kMapSize) + (static_cast<int>(camera->getDrawSize().x / 2.0f) / kMapSize) + 1;
 
-		for (x = 0; x < MapChip::kMapWidth; x++) {
+	if (firstX < 0) {
+		firstX = 0;
+	}
+	if (lastX > kMapWidth) {
+		lastX = kMapWidth;
+	}
+
+	for (y = firstY; y >= lastY; y--) {
+		for (x = firstX; x < lastX; x++) {
 			quad.worldPos = { static_cast<float>((x * kMapSize) + kMapSize / 2), static_cast<float>((y * kMapSize) + kMapSize / 2) };
 			MyMath::CoordinateChange(quad.worldPos);
 			quad.worldMatrix.MakeTranslate(quad.worldPos);
-
-			if (!camera->isDraw(quad.worldPos))
-			{
-				continue;
-			}
 
 			switch (data[y * MapChip::kMapWidth + x]) {
 			case (int)MapChip::Type::NONE:
