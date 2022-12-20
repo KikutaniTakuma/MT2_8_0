@@ -1,4 +1,5 @@
 #include "Game/Complex/Complex.h"
+#include "Game/Vector2D/Vector2D.h"
 
 Complex::Complex() {
 	this->real = 0.0f;
@@ -11,6 +12,10 @@ Complex::Complex(const float& re, const float& im) {
 }
 
 Complex::Complex(const Complex& tmp) {
+	*this = tmp;
+}
+
+Complex::Complex(const Vector2D& tmp) {
 	*this = tmp;
 }
 
@@ -39,6 +44,13 @@ const Complex& Complex::operator=(const Complex& num) {
 	return *this;
 }
 
+const Complex& Complex::operator=(const Vector2D& num) {
+	this->real = num.x;
+	this->imag = num.y;
+
+	return *this;
+}
+
 const Complex& Complex::operator+=(const Complex& num) {
 	*this = *this + num;
 
@@ -49,4 +61,10 @@ const Complex& Complex::operator*=(const Complex& num) {
 	*this = *this * num;
 
 	return *this;
+}
+
+const Vector2D& Complex::GetVector2D() const {
+	const Vector2D& tmp = *this;
+
+	return tmp;
 }

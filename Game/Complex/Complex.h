@@ -21,10 +21,28 @@ public:
 	Complex(const Complex& tmp);
 
 	/// <summary>
+	/// Vector2Dで初期化
+	/// </summary>
+	/// <param name="tmp">Vec2</param>
+	Complex(const class Vector2D& tmp);
+
+	/// <summary>
 	/// デストラクタ
 	/// </summary>
 	inline ~Complex(){}
 
+public:
+	/// <summary>
+	/// 実部
+	/// </summary>
+	float real;
+
+	/// <summary>
+	/// 虚部
+	/// </summary>
+	float imag;
+
+public:
 	/// <summary>
 	/// 演算子のオーバーロード
 	/// </summary>
@@ -49,6 +67,13 @@ public:
 	/// <summary>
 	/// 演算子のオーバーロード
 	/// </summary>
+	/// <param name="num">代入したいvec2</param>
+	/// <returns>*this</returns>
+	const Complex& operator=(const class Vector2D& num);
+
+	/// <summary>
+	/// 演算子のオーバーロード
+	/// </summary>
 	/// <param name="num">代入足し算したい複素数</param>
 	/// <returns>足して代入した結果</returns>
 	const Complex& operator+=(const Complex& num);
@@ -60,13 +85,6 @@ public:
 	/// <returns>掛けて代入した結果</returns>
 	const Complex& operator*=(const Complex& num);
 
-	/// <summary>
-	/// 実部
-	/// </summary>
-	float real;
-
-	/// <summary>
-	/// 虚部
-	/// </summary>
-	float imag;
+public:
+	const class Vector2D& GetVector2D() const;
 };

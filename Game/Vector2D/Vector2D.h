@@ -11,6 +11,8 @@ public:
 	// コピーコンストラクタ
 	Vector2D(const Vector2D& num);
 
+	Vector2D(const class Complex& tmp);
+
 	// デストラクタ
 	inline ~Vector2D(){}
 
@@ -18,6 +20,7 @@ public:
 	float x;
 	float y;
 
+public:
 	// =================================================================================
 	//演算子のオーバーロード
 	//　使用例
@@ -68,5 +71,9 @@ public:
 	Vector2D operator*(const Matrix3x3& matrix) const;
 	const Vector2D& operator*=(const Matrix3x3& matrix);
 
+	const Vector2D& operator=(const class Complex& num);
+
 	// =================================================================================
+
+	const class Complex& GetComplex() const;
 };

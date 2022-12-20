@@ -1,5 +1,6 @@
 #include "Vector2D.h"
-#include "game/Matrix3x3/Matrix3x3.h"
+#include "Game/Matrix3x3/Matrix3x3.h"
+#include "Game/Complex/Complex.h"
 #include <assert.h>
 
 Vector2D::Vector2D() {
@@ -13,6 +14,10 @@ Vector2D::Vector2D(const Vector2D& num) {
 Vector2D::Vector2D(const float& X, const float& Y) {
 	this->x = X;
 	this->y = Y;
+}
+
+Vector2D::Vector2D(const class Complex& tmp) {
+	*this = tmp;
 }
 
 
@@ -255,4 +260,17 @@ const Vector2D& Vector2D::operator*=(const Matrix3x3& matrix) {
 	*this /= w;
 
 	return *this;
+}
+
+const Vector2D& Vector2D::operator=(const class Complex& num) {
+	this->x = num.real;
+	this->y = num.imag;
+
+	return *this;
+}
+
+const Complex& Vector2D::GetComplex() const {
+	const Complex& tmp = *this;
+
+	return tmp;
 }
