@@ -102,7 +102,7 @@ void MapChip::Draw(Texture& texture) {
 		for (x = firstX; x < lastX; x++) {
 			quad.worldPos = { static_cast<float>((x * kMapSize) + kMapSize / 2), static_cast<float>((y * kMapSize) + kMapSize / 2) };
 			MyMath::CoordinateChange(quad.worldPos);
-			quad.worldMatrix.MakeTranslate(quad.worldPos);
+			quad.worldMatrix.Translate(quad.worldPos);
 
 			switch (data[y * MapChip::kMapWidth + x]) {
 			case (int)MapChip::Type::NONE:

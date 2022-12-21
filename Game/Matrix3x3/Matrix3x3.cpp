@@ -4,8 +4,6 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-#include <Novice.h>
-
 Matrix3x3::Matrix3x3()
 {
 	for (int&& y = 0; y < Matrix3x3::HEIGHT; y++) {
@@ -49,7 +47,7 @@ const Matrix3x3& Matrix3x3::operator*=(const Matrix3x3& Matrix1) {
 	return *this;
 }
 
-void Matrix3x3::MakeRotate(float degree) {
+void Matrix3x3::Rotate(float degree) {
 	degree *= static_cast<float>(M_PI) / 180.0f;
 
 	this->m[0][0] = cosf(degree);
@@ -63,7 +61,7 @@ void Matrix3x3::MakeRotate(float degree) {
 	this->m[2][2] = 1.0f;
 }
 
-void Matrix3x3::MakeTranslate(const Vector2D& vec) {
+void Matrix3x3::Translate(const Vector2D& vec) {
 	this->m[0][1] = 0.0f;
 	this->m[0][2] = 0.0f;
 	this->m[1][0] = 0.0f;
@@ -76,7 +74,7 @@ void Matrix3x3::MakeTranslate(const Vector2D& vec) {
 	this->m[2][0] = vec.x;
 	this->m[2][1] = vec.y;
 }
-void Matrix3x3::MakeTranslate(const float& vecX, const float& vecY) {
+void Matrix3x3::Translate(const float& vecX, const float& vecY) {
 	this->m[0][1] = 0.0f;
 	this->m[0][2] = 0.0f;
 	this->m[1][0] = 0.0f;
@@ -90,7 +88,7 @@ void Matrix3x3::MakeTranslate(const float& vecX, const float& vecY) {
 	this->m[2][1] = vecY;
 }
 
-void Matrix3x3::MakeScalar(const Vector2D& vec) {
+void Matrix3x3::Scalar(const Vector2D& vec) {
 	this->m[0][1] = 0.0f;
 	this->m[0][2] = 0.0f;
 	this->m[1][0] = 0.0f;
@@ -103,7 +101,7 @@ void Matrix3x3::MakeScalar(const Vector2D& vec) {
 	this->m[1][1] = vec.y;
 	this->m[2][2] = 1.0f;
 }
-void Matrix3x3::MakeScalar(const float& vecX, const float& vecY) {
+void Matrix3x3::Scalar(const float& vecX, const float& vecY) {
 	this->m[0][1] = 0.0f;
 	this->m[0][2] = 0.0f;
 	this->m[1][0] = 0.0f;

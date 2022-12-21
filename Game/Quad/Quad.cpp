@@ -43,7 +43,7 @@ void Quad::Scale(const float& scale) {
 
 void Quad::Rotate(float deg) {
 	Matrix3x3 rotate;
-	rotate.MakeRotate(deg);
+	rotate.Rotate(deg);
 
 	this->leftTop *= rotate;
 	this->leftUnder *= rotate;

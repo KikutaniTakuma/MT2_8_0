@@ -22,7 +22,7 @@ Camera::Camera() {
 	size = { static_cast<float>(MapChip::kWindowWidth), static_cast<float>(MapChip::kWindowHeight) };
 	scale = 1.0f;
 
-	viewMatrix.MakeTranslate(worldPos);
+	viewMatrix.Translate(worldPos);
 	viewMatrix.Inverse();
 
 	NorDevMatrix.Orthographic(drawLeftTop, drawRightBottom);
@@ -136,7 +136,7 @@ void Camera::Update() {
 		frame->Restart();
 	}
 
-	viewMatrix.MakeTranslate(this->worldPos);
+	viewMatrix.Translate(this->worldPos);
 	viewMatrix.Inverse();
 	NorDevMatrix.Orthographic(drawLeftTop / scale, drawRightBottom / scale);
 	viewPortMatrix.Viewport(screenPos, size);
@@ -160,7 +160,7 @@ void Camera::Update(const Vector2D& worldPos, const Vector2D& cameraPos, const f
 		Shake();
 	}
 
-	viewMatrix.MakeTranslate(this->worldPos);
+	viewMatrix.Translate(this->worldPos);
 	viewMatrix.Inverse();
 	NorDevMatrix.Orthographic(size / this->scale);
 	viewPortMatrix.Viewport(cameraPos, size);
@@ -184,7 +184,7 @@ void Camera::Update(const Vector2D& worldPos, const Vector2D& cameraPos, const V
 	this->drawLeftTop = drawLeftTop;
 	this->drawRightBottom = drawRightBottom;
 
-	viewMatrix.MakeTranslate(this->worldPos);
+	viewMatrix.Translate(this->worldPos);
 	viewMatrix.Inverse();
 	NorDevMatrix.Orthographic(this->drawLeftTop, this->drawRightBottom);
 	viewPortMatrix.Viewport(cameraPos, size);
@@ -247,7 +247,7 @@ void Camera::DrawQuad(Quad quad, Texture& texture, float deg, const int& animati
 
 void Camera::DrawUI(Quad quad, Texture& texture, const int& animationSpd, const bool& animationStop, const unsigned int& color) const {
 	Matrix3x3 mat;
-	mat.MakeTranslate(worldPos);
+	mat.Translate(worldPos);
 	quad.worldMatrix *= mat * vpvpMatrix;
 
 	if (!animationStop && animationSpd != 0) {

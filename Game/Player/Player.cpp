@@ -113,7 +113,7 @@ void Player::Update() {
 
 	this->Collision();
 
-	pos->worldMatrix.MakeTranslate(pos->worldPos);
+	pos->worldMatrix.Translate(pos->worldPos);
 }
 
 // •`‰æˆ—ŠÖ”

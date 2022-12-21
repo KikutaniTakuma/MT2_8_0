@@ -15,20 +15,22 @@ private:
 public:
 	float m[HEIGHT][WIDTH];
 
+public:
 	Matrix3x3 operator*(const Matrix3x3& Matrix1) const;
 	const Matrix3x3& operator=(const Matrix3x3& Matrix1);
 	const Matrix3x3& operator*=(const Matrix3x3& Matrix1);
 
+public:
 	// 回転行列
-	void MakeRotate(float degree);
+	void Rotate(float degree);
 
 	// 平行移動行列
-	void MakeTranslate(const Vector2D& vec);
-	void MakeTranslate(const float& vecX, const float& vecY);
+	void Translate(const Vector2D& vec);
+	void Translate(const float& vecX, const float& vecY);
 
 	// スカラー倍行列
-	void MakeScalar(const Vector2D& vec);
-	void MakeScalar(const float& vecX, const float& vecY);
+	void Scalar(const Vector2D& vec);
+	void Scalar(const float& vecX, const float& vecY);
 
 	// アフィン変換
 	void Affin(const Vector2D& size, float degree, const Vector2D& trancelate);
@@ -49,5 +51,4 @@ public:
 	/// <param name="pos">カメラの左上の座標</param>
 	/// <param name="size">大きさ</param>
 	void Viewport(const Vector2D& pos, const Vector2D& size);
-
 };
