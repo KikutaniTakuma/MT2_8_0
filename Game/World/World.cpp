@@ -59,7 +59,7 @@ World::World() {
 
 	object.reserve(1);
 
-	object.push_back(new Player(camera));
+	object.emplace_back(new Player(camera));
 
 	this->whiteBox = new Texture("./Resources/white1x1.png", 32, 32, 32);
 }
@@ -76,7 +76,7 @@ World::World(int screenSizeX, int screenSizeY) {
 
 	object.reserve(1);
 
-	object.push_back(new Player(camera));
+	object.emplace_back(new Player(camera));
 
 	this->whiteBox = new Texture("./Resources/white1x1.png", 32, 32, 32);
 }
