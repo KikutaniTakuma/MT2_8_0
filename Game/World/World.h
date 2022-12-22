@@ -1,9 +1,6 @@
 #pragma once
 
-#include "Game/Vector2D/Vector2D.h"
-
-class Matrix3x3;
-class Camera;
+#include <vector>
 
 class World {
 public:
@@ -12,6 +9,7 @@ public:
 	~World();
 
 private:
+	void BeginProcess();
 	void Input();
 	void Reset();
 	void Update();
@@ -21,9 +19,9 @@ public:
 	void MainLoop();
 
 private:
-	Camera* camera;
+	class Camera* camera;
 
-	class Player* player;
+	std::vector<class Object*> object;
 
 	class Texture* whiteBox;
 };

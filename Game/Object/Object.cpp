@@ -3,3 +3,7 @@
 Object::Object(Camera* camera)
 	:camera(camera)
 {}
+
+void Object::BeginProcess() {
+	drawPos = pos;
+}

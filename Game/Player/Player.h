@@ -26,7 +26,6 @@ private:
 	Vector2D* tentativPos;
 	Vector2D* size;
 	Vector2D* moveVec;
-	class Quad* pos;
 
 	float spd;
 

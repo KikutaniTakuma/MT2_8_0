@@ -20,7 +20,6 @@
 Player::Player(Camera* camera):
 	Object(camera)
 {
-	pos = new Quad;
 	size = new Vector2D;
 	tentativPos = new Vector2D;
 	moveVec = new Vector2D;
@@ -33,7 +32,7 @@ Player::Player(Camera* camera):
 			data[4]
 		};
 
-		pos->Set({ data[0],data[1] }, *size);
+		pos.Set({ data[0],data[1] }, *size);
 
 		spd = data[2];
 
@@ -47,7 +46,7 @@ Player::Player(Camera* camera):
 		flgZeroGravity = static_cast<bool>(data[9]);
 	}
 	else {
-		pos->worldPos = {
+		pos.worldPos = {
 		640.0f,
 		140.0f
 		};
@@ -71,7 +70,7 @@ Player::Player(Camera* camera):
 
 		// データバッファー
 		data = {
-			pos->worldPos.x, pos->worldPos.y,
+			pos.worldPos.x, pos.worldPos.y,
 			spd,
 			size->x, size->y,
 			jumpValue, jumpSeconsdValue, gravity,
@@ -90,7 +89,7 @@ Player::Player(Camera* camera):
 		IOcsv::Output("./Data/playerData.csv", data, coment);
 	}
 
-	*tentativPos = pos->worldPos;
+	*tentativPos = pos.worldPos;
 
 	flgJump = false;
 
@@ -101,7 +100,6 @@ Player::Player(Camera* camera):
 
 // デストラクタ
 Player::~Player() {
-	delete pos;
 	delete tentativPos;
 	delete size;
 	delete moveVec;
@@ -113,13 +111,12 @@ void Player::Update() {
 
 	this->Collision();
 
-	pos->worldMatrix.Translate(pos->worldPos);
+	pos.worldMatrix.Translate(pos.worldPos);
 }
 
 // 描画処理関数
-
 void Player::Draw(Texture& tex) {
-	camera->DrawQuad(*pos, tex, 6, false, BLUE);
+	camera->DrawQuad(drawPos, tex, 6, false, BLUE);
 }
 
 // 移動関数
@@ -207,13 +204,13 @@ void Player::Jump() {
 
 // 当たり判定関数
 void Player::Collision() {
-	Vector2D LeftTop = { pos->getSizeLeftTop().x + tentativPos->x, pos->getSizeLeftTop().y + tentativPos->y };
+	Vector2D LeftTop = { pos.getSizeLeftTop().x + tentativPos->x, pos.getSizeLeftTop().y + tentativPos->y };
 
-	Vector2D RightTop = { pos->getSizeRightTop().x + tentativPos->x - 1.0f, pos->getSizeRightTop().y + tentativPos->y };
+	Vector2D RightTop = { pos.getSizeRightTop().x + tentativPos->x - 1.0f, pos.getSizeRightTop().y + tentativPos->y };
 
-	Vector2D LeftUnder = { pos->getSizeLeftUnder().x + tentativPos->x , pos->getSizeLeftUnder().y + tentativPos->y + 1.0f };
+	Vector2D LeftUnder = { pos.getSizeLeftUnder().x + tentativPos->x , pos.getSizeLeftUnder().y + tentativPos->y + 1.0f };
 
-	Vector2D RightUnder = { pos->getSizeRightUnder().x + tentativPos->x - 1.0f, pos->getSizeRightUnder().y + tentativPos->y + 1.0f };
+	Vector2D RightUnder = { pos.getSizeRightUnder().x + tentativPos->x - 1.0f, pos.getSizeRightUnder().y + tentativPos->y + 1.0f };
 
 	// もし上に向かっていたら
 	if (moveVec->y > 0.0f) {
@@ -659,20 +656,20 @@ void Player::Collision() {
 		}
 	}
 
-	LeftTop = { pos->getSizeLeftTop().x + tentativPos->x, pos->getSizeLeftTop().y + tentativPos->y };
+	LeftTop = { pos.getSizeLeftTop().x + tentativPos->x, pos.getSizeLeftTop().y + tentativPos->y };
 
-	RightTop = { pos->getSizeRightTop().x + tentativPos->x - 1.0f, pos->getSizeRightTop().y + tentativPos->y };
+	RightTop = { pos.getSizeRightTop().x + tentativPos->x - 1.0f, pos.getSizeRightTop().y + tentativPos->y };
 
-	LeftUnder = { pos->getSizeLeftUnder().x + tentativPos->x , pos->getSizeLeftUnder().y + tentativPos->y + 1.0f };
+	LeftUnder = { pos.getSizeLeftUnder().x + tentativPos->x , pos.getSizeLeftUnder().y + tentativPos->y + 1.0f };
 
-	RightUnder = { pos->getSizeRightUnder().x + tentativPos->x - 1.0f, pos->getSizeRightUnder().y + tentativPos->y + 1.0f };
+	RightUnder = { pos.getSizeRightUnder().x + tentativPos->x - 1.0f, pos.getSizeRightUnder().y + tentativPos->y + 1.0f };
 
 	if (!MapChip::Collision(LeftUnder) && !MapChip::Collision(RightUnder)) {
 		flgGravity = true;
 	}
 
 	if (!MapChip::Collision(RightTop) && !MapChip::Collision(LeftTop) && !MapChip::Collision(RightUnder) && !MapChip::Collision(LeftUnder)) {
-		pos->worldPos = *tentativPos;
+		pos.worldPos = *tentativPos;
 	}
 }
 
@@ -687,7 +684,7 @@ void Player::Reset() {
 			data[4]
 		};
 
-		pos->Set({ data[0],data[1] }, *size);
+		pos.Set({ data[0],data[1] }, *size);
 
 		spd = data[2];
 
@@ -701,13 +698,13 @@ void Player::Reset() {
 		flgZeroGravity = static_cast<bool>(data[9]);
 	}
 
-	*tentativPos = pos->worldPos;
+	*tentativPos = pos.worldPos;
 }
 
 // getter
-Vector2D Player::getWorldPos() const { return pos->worldPos; }
-float Player::getWorldPosX() const { return pos->worldPos.x; }
-float Player::getWorldPosY() const { return pos->worldPos.y; }
+Vector2D Player::getWorldPos() const { return pos.worldPos; }
+float Player::getWorldPosX() const { return pos.worldPos.x; }
+float Player::getWorldPosY() const { return pos.worldPos.y; }
 
 float Player::getSize() const
 {
@@ -718,7 +715,7 @@ float Player::getSize() const
 // setter
 void Player::setWorldPos(Vector2D pos) {
 	*tentativPos = pos;
-	this->pos->worldPos = pos;
+	this->pos.worldPos = pos;
 }
-void Player::setWorldPosX(const float& num) { pos->worldPos.x = num; }
-void Player::setWorldPosY(const float& num) { pos->worldPos.y = num; }
+void Player::setWorldPosX(const float& num) { pos.worldPos.x = num; }
+void Player::setWorldPosY(const float& num) { pos.worldPos.y = num; }

@@ -3,6 +3,7 @@
 #include "Game/Mouse/Mouse.h"
 #include "Game/Vector2D/Vector2D.h"
 #include "Game/Matrix3x3/Matrix3x3.h"
+#include "Game/Object/Object.h"
 #include "Game/Player/Player.h"
 #include "Game/Gamepad/Gamepad.h"
 #include "Game/MapChip/MapChip.h"
@@ -10,6 +11,7 @@
 #include "Game/Camera/Camera.h"
 #include <Novice.h>
 #include <assert.h>
+#include <thread>
 
 ///==========================================================================================================================================
 ///==========================================================================================================================================
@@ -21,14 +23,18 @@ const char* kWindowTitle = "LC1A_08_キクタニタクマ_タイトル";
 void World::Update() {
 	camera->Update();
 
-	player->Update();
+	for (auto& i : object) {
+		i->Update();
+	}
 }
 
 // 描画処理
 void World::Draw() {
 	MapChip::Draw(*whiteBox);
 
-	player->Draw(*whiteBox);
+	for (auto& i : object) {
+		i->Draw(*whiteBox);
+	}
 }
 
 
@@ -51,7 +57,9 @@ World::World() {
 
 	MapChip::SetCamera(camera);
 
-	player = new Player(camera);
+	object.reserve(1);
+
+	object.push_back(new Player(camera));
 
 	this->whiteBox = new Texture("./Resources/white1x1.png", 32, 32, 32);
 }
@@ -66,20 +74,26 @@ World::World(int screenSizeX, int screenSizeY) {
 
 	MapChip::SetCamera(camera);
 
-	player = new Player(camera);
+	object.reserve(1);
+
+	object.push_back(new Player(camera));
 
 	this->whiteBox = new Texture("./Resources/white1x1.png", 32, 32, 32);
 }
 
 World::~World() {
-	delete player;
-
 	delete camera;
 
 	MapChip::Finalize();
 
 	// ライブラリの終了
 	Novice::Finalize();
+}
+
+void World::BeginProcess() {
+	for (auto& i : object) {
+		i->BeginProcess();
+	}
 }
 
 void World::Input() {
@@ -97,12 +111,34 @@ void World::Reset() {
 	if (KeyInput::LongPush(DIK_LSHIFT) || KeyInput::LongPush(DIK_RSHIFT)) {
 		if (KeyInput::Released(DIK_R)) {
 			MapChip::Reset();
-			player->Reset();
+			for (auto& i : object) {
+				i->Reset();
+			}
 		}
 	}
 }
 
 void World::MainLoop() {
+	/// 
+	/// 初期フレーム処理
+	/// 
+	
+	// フレームの開始
+	Novice::BeginFrame();
+
+	this->Input();
+
+	this->Reset();
+
+	this->Update();
+
+	// フレームの終了
+	Novice::EndFrame();
+
+	///
+	/// ===============================================
+	/// 
+
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
 		// フレームの開始
@@ -112,9 +148,15 @@ void World::MainLoop() {
 
 		this->Reset();
 
-		this->Update();
+		// 非同期処理のための処理
+		this->BeginProcess();
 
-		this->Draw();
+		std::thread update(&World::Update, this);
+
+		std::thread draw(&World::Draw, this);
+
+		update.join();
+		draw.join();
 
 		// フレームの終了
 		Novice::EndFrame();
