@@ -21,8 +21,6 @@ const char* kWindowTitle = "LC1A_08_キクタニタクマ_タイトル";
 
 // アップデート処理
 void World::Update() {
-	camera->Update();
-
 	for (auto& i : object) {
 		i->Update();
 	}
@@ -30,6 +28,8 @@ void World::Update() {
 
 // 描画処理
 void World::Draw() {
+	camera->Update();
+
 	MapChip::Draw(*whiteBox);
 
 	for (auto& i : object) {
@@ -57,7 +57,7 @@ World::World() {
 
 	MapChip::SetCamera(camera);
 
-	object.reserve(1);
+	object.reserve(0);
 
 	object.emplace_back(new Player(camera));
 
@@ -74,7 +74,7 @@ World::World(int screenSizeX, int screenSizeY) {
 
 	MapChip::SetCamera(camera);
 
-	object.reserve(1);
+	object.reserve(0);
 
 	object.emplace_back(new Player(camera));
 
