@@ -49,6 +49,7 @@ void Camera::Update() {
 	/// PGDN で引き
 	/// Lshift + PGUP でカメラ内のアップ
 	/// Lshift + PGDN でカメラ内の引き
+	/// Lshift + Rshift でシェイク
 	
 	if (KeyInput::getKeys(DIK_LCONTROL)) {
 		if (KeyInput::getKeys(DIK_UP)) {
@@ -109,16 +110,16 @@ void Camera::Update() {
 
 	if (KeyInput::getKeys(DIK_LSHIFT)) {
 		if (KeyInput::getKeys(DIK_PGUP)) {
-			drawLeftTop.x += 5.0f * 16.0f / 9.0f;
-			drawLeftTop.y -= 5.0f * 9.0f / 16.0f;
-			drawRightBottom.x -= 5.0f * 16.0f / 9.0f;
-			drawRightBottom.y += 5.0f * 9.0f / 16.0f;
+			drawLeftTop.x += 5.0f;
+			drawLeftTop.y -= 2.8125f;
+			drawRightBottom.x -= 5.0f;
+			drawRightBottom.y += 2.8125f;
 		}
 		else if (KeyInput::getKeys(DIK_PGDN)) {
-			drawLeftTop.x -= 5.0f * 16.0f / 9.0f;
-			drawLeftTop.y += 5.0f * 9.0f / 16.0f;
-			drawRightBottom.x += 5.0f * 16.0f / 9.0f;
-			drawRightBottom.y -= 5.0f * 9.0f / 16.0f;
+			drawLeftTop.x -= 5.0f;
+			drawLeftTop.y += 2.8125f;
+			drawRightBottom.x += 5.0f;
+			drawRightBottom.y -= 2.8125f;
 		}
 	}
 	else {
@@ -130,18 +131,31 @@ void Camera::Update() {
 		}
 	}
 
+	if (KeyInput::getKeys(DIK_LSHIFT) && KeyInput::getKeys(DIK_RSHIFT)) {
+		Vector2D tmp = this->worldPos;
+
+		Shake();
+		viewMatrix.Translate(this->worldPos);
+		viewMatrix.Inverse();
+
+		worldPos = tmp;
+	}
+	else {
+		viewMatrix.Translate(this->worldPos);
+		viewMatrix.Inverse();
+	}
+
+	
+	NorDevMatrix.Orthographic(drawLeftTop / scale, drawRightBottom / scale);
+	viewPortMatrix.Viewport(screenPos, size);
+
+	vpvpMatrix = viewMatrix * NorDevMatrix * viewPortMatrix;
+
 	frame->Start();
 	if (frame->frame > ULLONG_MAX) {
 		frame->Stop();
 		frame->Restart();
 	}
-
-	viewMatrix.Translate(this->worldPos);
-	viewMatrix.Inverse();
-	NorDevMatrix.Orthographic(drawLeftTop / scale, drawRightBottom / scale);
-	viewPortMatrix.Viewport(screenPos, size);
-
-	vpvpMatrix = viewMatrix * NorDevMatrix * viewPortMatrix;
 }
 
 void Camera::Update(const Vector2D& worldPos, const Vector2D& cameraPos, const float& scale, const bool& shake) {

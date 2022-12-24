@@ -101,6 +101,7 @@
     <ClCompile Include="C:\KamataEngine\Adapter\Novice.cpp" />
     <ClCompile Include="Game\Camera\Camera.cpp" />
     <ClCompile Include="Game\Complex\Complex.cpp" />
+    <ClCompile Include="Game\Effect\Effect.cpp" />
     <ClCompile Include="Game\Frame\Frame.cpp" />
     <ClCompile Include="Game\Gamepad\Gamepad.cpp" />
     <ClCompile Include="Game\IOcsv\IOcsv.cpp" />
@@ -147,6 +148,7 @@
     <ClInclude Include="C:\KamataEngine\Adapter\Novice.h" />
     <ClInclude Include="Game\Camera\Camera.h" />
     <ClInclude Include="Game\Complex\Complex.h" />
+    <ClInclude Include="Game\Effect\Effect.h" />
     <ClInclude Include="Game\Frame\Frame.h" />
     <ClInclude Include="Game\Gamepad\Gamepad.h" />
     <ClInclude Include="Game\IOcsv\IOcsv.h" />

@@ -1,6 +1,7 @@
 #include "Quad.h"
 #include "Game/Matrix3x3/Matrix3x3.h"
 #include "Game/MapChip/MapChip.h"
+#include "Game/MyMath/MyMath.h"
 
 Quad::Quad() {}
 
@@ -36,8 +37,6 @@ void Quad::Scale(const float& scale) {
 		leftUnder *= scale;
 		rightTop *= scale;
 		rightUnder *= scale;
-
-		worldPos *= scale;
 	}
 }
 
@@ -84,9 +83,7 @@ const Quad& Quad::operator*=(const  Matrix3x3& matrix) {
 	return *this;
 }
 
-Quad Quad::operator+(const Vector2D& vec)
-{
-	// TODO: return ステートメントをここに挿入します
+Quad Quad::operator+(const Vector2D& vec){
 	Quad quad;
 
 	quad.leftTop = leftTop + vec;
@@ -103,29 +100,29 @@ Quad Quad::operator+(const Vector2D& vec)
 	return quad;
 }
 
-Vector2D Quad::getPosLeftTop() const {
+const Vector2D& Quad::getPosLeftTop() const {
 	return leftTop + worldPos;
 }
-Vector2D Quad::getPosLeftUnder() const {
+const Vector2D& Quad::getPosLeftUnder() const {
 	return leftUnder + worldPos;
 }
-Vector2D Quad::getPosRightTop() const {
+const Vector2D& Quad::getPosRightTop() const {
 	return rightTop + worldPos;
 }
-Vector2D Quad::getPosRightUnder() const {
+const Vector2D& Quad::getPosRightUnder() const {
 	return rightUnder +worldPos;
 }
 
-Vector2D Quad::getMatrixLeftTop() const {
+const Vector2D& Quad::getMatrixLeftTop() const {
 	return leftTop * worldMatrix;
 }
-Vector2D Quad::getMatrixLeftUnder() const {
+const Vector2D& Quad::getMatrixLeftUnder() const {
 	return leftUnder * worldMatrix;
 }
-Vector2D Quad::getMatrixRightTop() const {
+const Vector2D& Quad::getMatrixRightTop() const {
 	return rightTop * worldMatrix;
 }
-Vector2D Quad::getMatrixRightUnder() const {
+const Vector2D& Quad::getMatrixRightUnder() const {
 	return rightUnder * worldMatrix;
 }
 

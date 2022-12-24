@@ -3,6 +3,10 @@
 class Vector2D;
 
 class MyMath {
+private:
+	inline MyMath(){}
+	inline ~MyMath(){}
+
 public:
 	// ƒ[ƒ‹ƒhÀ•W‚ğ•ÏŠ·‚Ì’è”
 	static const int kCoodinateChangeConstant;
@@ -137,8 +141,7 @@ public:
 	/// <param name="num2">ŒğŠ·‚µ‚½‚¢‚à‚Ì2</param>
 	template<typename T>
 	inline static void Swap(T& num, T& num2) {
-		T tmp;
-		tmp = num;
+		T tmp = num;
 		num = num2;
 		num2 = tmp;
 	}
