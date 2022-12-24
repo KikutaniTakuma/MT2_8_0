@@ -108,3 +108,7 @@ float MyMath::Clamp(float num,float max,float min)
 	}
 	return num;
 }
+
+unsigned int MyMath::GetRGB(unsigned int red, unsigned int green, unsigned int blue, unsigned int alpha) {
+	return (red << 24) + (green << 16) + (blue << 8) + alpha;
+}
