@@ -19,7 +19,7 @@
 
 const char* kWindowTitle = "LC1A_08_キクタニタクマ_タイトル";
 
-// アップデート処理
+// 更新処理
 void World::Update() {
 	for (auto& i : object) {
 		i->Update();

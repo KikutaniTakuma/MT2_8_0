@@ -1,11 +1,21 @@
 #pragma once
 
+#include <array>
+#include <functional>
+
 class Vector2D;
 
 class Matrix3x3 {
 public:
+	using arr3x3 = std::array<std::array<float, 3>, 3>;
+
+public:
 	Matrix3x3();
 	Matrix3x3(const Matrix3x3& matrix);
+	Matrix3x3(std::function<void(float)> func, float degree);
+	Matrix3x3(std::function<void(const Vector2D&)> func, const Vector2D& vec);
+	Matrix3x3(std::function<void(const Vector2D&, const Vector2D&)> func, const Vector2D& vec1, const Vector2D& vec2);
+
 	inline ~Matrix3x3() {}
 
 private:
@@ -13,7 +23,7 @@ private:
 	static const int WIDTH = 3;
 
 public:
-	float m[HEIGHT][WIDTH];
+	arr3x3 m;
 
 public:
 	Matrix3x3 operator*(const Matrix3x3& Matrix1) const;
@@ -23,17 +33,21 @@ public:
 public:
 	// 回転行列
 	void Rotate(float degree);
+	friend Matrix3x3 MakeRotate(float degree);
 
 	// 平行移動行列
 	void Translate(const Vector2D& vec);
 	void Translate(const float& vecX, const float& vecY);
+	friend Matrix3x3 MakeTranslate(const Vector2D& vec);
 
 	// スカラー倍行列
 	void Scalar(const Vector2D& vec);
 	void Scalar(const float& vecX, const float& vecY);
+	friend Matrix3x3 MakeScalar(const Vector2D& vec);
 
 	// アフィン変換
 	void Affin(const Vector2D& size, float degree, const Vector2D& trancelate);
+	friend Matrix3x3 MakeAffin(const Vector2D& size, float degree, const Vector2D& trancelate);
 
 	// 逆行列
 	void Inverse();

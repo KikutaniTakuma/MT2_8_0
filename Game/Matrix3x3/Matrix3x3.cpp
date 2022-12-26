@@ -5,13 +5,8 @@
 #include <math.h>
 
 Matrix3x3::Matrix3x3()
-{
-	for (int&& y = 0; y < Matrix3x3::HEIGHT; y++) {
-		for (int&& x = 0; x < Matrix3x3::WIDTH; x++) {
-			this->m[y][x] = 0.0f;
-		}
-	}
-}
+	:m({ 0.0f })
+{}
 
 Matrix3x3::Matrix3x3(const Matrix3x3& matrix) {
 	*this = matrix;
@@ -20,9 +15,9 @@ Matrix3x3::Matrix3x3(const Matrix3x3& matrix) {
 Matrix3x3 Matrix3x3::operator*(const Matrix3x3& Matrix1) const{
 	Matrix3x3 tmp;
 
-	for (int&& y = 0; y < Matrix3x3::HEIGHT; y++) {
-		for (int&& x = 0; x < Matrix3x3::WIDTH; x++) {
-			for (int&& i = 0; i < Matrix3x3::WIDTH; i++) {
+	for (int y = 0; y < Matrix3x3::HEIGHT; y++) {
+		for (int x = 0; x < Matrix3x3::WIDTH; x++) {
+			for (int i = 0; i < Matrix3x3::WIDTH; i++) {
 				tmp.m[y][x] += this->m[y][i] * Matrix1.m[i][x];
 			}
 		}
@@ -32,11 +27,7 @@ Matrix3x3 Matrix3x3::operator*(const Matrix3x3& Matrix1) const{
 }
 
 const Matrix3x3& Matrix3x3::operator=(const Matrix3x3& Matrix1) {
-	for (int&& y = 0; y < Matrix3x3::HEIGHT; y++) {
-		for (int&& x = 0; x < Matrix3x3::WIDTH; x++) {
-			this->m[y][x] = Matrix1.m[y][x];
-		}
-	}
+	this->m = Matrix1.m;
 
 	return *this;
 }

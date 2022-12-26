@@ -81,10 +81,10 @@ public:
 	// getter
 	// worldPos‚ğ‘«‚µ‚½‚à‚Ì‚ª•Ô‚Á‚Ä‚­‚é
 
-	const Vector2D& getPosLeftTop() const;
-	const Vector2D& getPosLeftUnder() const;
-	const Vector2D& getPosRightTop() const;
-	const Vector2D& getPosRightUnder() const;
+	Vector2D getPosLeftTop() const;
+	Vector2D getPosLeftUnder() const;
+	Vector2D getPosRightTop() const;
+	Vector2D getPosRightUnder() const;
 
 	// worldPos‚ğ‘«‚µ‚Ä‚È‚¢‚à‚Ì‚ª•Ô‚Á‚Ä‚­‚é
 	const Vector2D& getSizeLeftTop() const;
@@ -93,8 +93,8 @@ public:
 	const Vector2D& getSizeRightUnder() const;
 
 	// ƒ[ƒ‹ƒhs—ñ‚ğŠ|‚¯‚½‚à‚Ì‚ğ•Ô‚·
-	const Vector2D& getMatrixLeftTop() const;
-	const Vector2D& getMatrixLeftUnder() const;
-	const Vector2D& getMatrixRightTop() const;
-	const Vector2D& getMatrixRightUnder() const;
+	Vector2D getMatrixLeftTop() const;
+	Vector2D getMatrixLeftUnder() const;
+	Vector2D getMatrixRightTop() const;
+	Vector2D getMatrixRightUnder() const;
 };

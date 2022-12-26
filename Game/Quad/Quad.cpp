@@ -100,29 +100,29 @@ Quad Quad::operator+(const Vector2D& vec){
 	return quad;
 }
 
-const Vector2D& Quad::getPosLeftTop() const {
+Vector2D Quad::getPosLeftTop() const {
 	return leftTop + worldPos;
 }
-const Vector2D& Quad::getPosLeftUnder() const {
+Vector2D Quad::getPosLeftUnder() const {
 	return leftUnder + worldPos;
 }
-const Vector2D& Quad::getPosRightTop() const {
+Vector2D Quad::getPosRightTop() const {
 	return rightTop + worldPos;
 }
-const Vector2D& Quad::getPosRightUnder() const {
+Vector2D Quad::getPosRightUnder() const {
 	return rightUnder +worldPos;
 }
 
-const Vector2D& Quad::getMatrixLeftTop() const {
+Vector2D Quad::getMatrixLeftTop() const {
 	return leftTop * worldMatrix;
 }
-const Vector2D& Quad::getMatrixLeftUnder() const {
+Vector2D Quad::getMatrixLeftUnder() const {
 	return leftUnder * worldMatrix;
 }
-const Vector2D& Quad::getMatrixRightTop() const {
+Vector2D Quad::getMatrixRightTop() const {
 	return rightTop * worldMatrix;
 }
-const Vector2D& Quad::getMatrixRightUnder() const {
+Vector2D Quad::getMatrixRightUnder() const {
 	return rightUnder * worldMatrix;
 }
 
