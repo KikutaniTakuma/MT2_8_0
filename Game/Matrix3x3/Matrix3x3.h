@@ -1,7 +1,6 @@
 #pragma once
 
 #include <array>
-#include <functional>
 
 class Vector2D;
 
@@ -12,9 +11,6 @@ public:
 public:
 	Matrix3x3();
 	Matrix3x3(const Matrix3x3& matrix);
-	Matrix3x3(std::function<void(float)> func, float degree);
-	Matrix3x3(std::function<void(const Vector2D&)> func, const Vector2D& vec);
-	Matrix3x3(std::function<void(const Vector2D&, const Vector2D&)> func, const Vector2D& vec1, const Vector2D& vec2);
 
 	inline ~Matrix3x3() {}
 
@@ -58,6 +54,8 @@ public:
 	// 正射影行列
 	void Orthographic(const Vector2D& leftTop, const Vector2D& rightUnder);
 	void Orthographic(const Vector2D& size);
+	friend Matrix3x3 MakeOrthographic(const Vector2D& leftTop, const Vector2D& rightUnder);
+	friend Matrix3x3 MakeOrthographic(const Vector2D& size);
 
 	/// <summary>
 	/// ビューポート行列
@@ -65,4 +63,6 @@ public:
 	/// <param name="pos">カメラの左上の座標</param>
 	/// <param name="size">大きさ</param>
 	void Viewport(const Vector2D& pos, const Vector2D& size);
+
+	friend Matrix3x3 MakeViewport(const Vector2D& pos, const Vector2D& size);
 };
